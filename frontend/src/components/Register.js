@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { createUser } from '../services/userService';
+import './Register.css';
 
 function Register() {
     const [nome, setNome] = useState('');
@@ -11,35 +12,53 @@ function Register() {
         event.preventDefault();
         try {
             await createUser({ nome, email, senha });
-            setMessage('User created successfully');
+            setMessage('Usuário criado com sucesso');
             setNome('');
             setEmail('');
             setSenha('');
         } catch (error) {
             const errorMsg = error.response ? error.response.data.error : error.message;
-            setMessage(`Error creating user: ${errorMsg}`);
+            setMessage(`Erro ao criar usuário: ${errorMsg}`);
         }
     };
 
     return (
-        <div>
+        <div className="register-container">
             <h2>Register</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
+            <form onSubmit={handleSubmit} className="register-form">
+                <div className="form-group">
                     <label>Nome</label>
-                    <input type="text" value={nome} onChange={(e) => setNome(e.target.value)} required />
+                    <input
+                        type="text"
+                        value={nome}
+                        onChange={(e) => setNome(e.target.value)}
+                        required
+                        className="form-control"
+                    />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Email</label>
-                    <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                    <input
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                        className="form-control"
+                    />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Senha</label>
-                    <input type="password" value={senha} onChange={(e) => setSenha(e.target.value)} required />
+                    <input
+                        type="password"
+                        value={senha}
+                        onChange={(e) => setSenha(e.target.value)}
+                        required
+                        className="form-control"
+                    />
                 </div>
-                <button type="submit">Register</button>
+                <button type="submit" className="register-btn">Registrar</button>
             </form>
-            {message && <p>{message}</p>}
+            {message && <p className="message">{message}</p>}
         </div>
     );
 }

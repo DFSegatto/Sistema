@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUsers, deleteUser } from '../services/userService';
+import './UserList.css';
 
 function UserList() {
     const [users, setUsers] = useState([]);
@@ -29,10 +30,10 @@ function UserList() {
     };
 
     return (
-        <div>
+        <div className="user-list-container">
             <h2>User List</h2>
-            {message && <p>{message}</p>}
-            <table>
+            {message && <p className="message">{message}</p>}
+            <table className="user-list-table">
                 <thead>
                     <tr>
                         <th>ID</th>
@@ -48,7 +49,7 @@ function UserList() {
                             <td>{user.nome}</td>
                             <td>{user.email}</td>
                             <td>
-                                <button onClick={() => handleDelete(user.id)}>Delete</button>
+                                <button onClick={() => handleDelete(user.id)} className="btn-delete">Delete</button>
                             </td>
                         </tr>
                     ))}
