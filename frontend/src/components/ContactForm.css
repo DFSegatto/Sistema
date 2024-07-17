@@ -1,5 +1,5 @@
-.update-user-container {
-    max-width: 400px;
+.contact-form-container {
+    max-width: 600px;
     margin: 50px auto;
     padding: 20px;
     border: 1px solid #ccc;
@@ -8,14 +8,14 @@
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-    .update-user-container h2 {
+    .contact-form-container h2 {
         text-align: center;
         margin-bottom: 20px;
         font-family: 'Arial', sans-serif;
         color: #333;
     }
 
-.update-user-form {
+.contact-form {
     display: flex;
     flex-direction: column;
 }
@@ -31,7 +31,8 @@
         font-weight: bold;
     }
 
-    .form-group input {
+    .form-group input,
+    .form-group textarea {
         width: 100%;
         box-sizing: border-box;
         padding: 10px;
@@ -40,7 +41,7 @@
         font-size: 16px;
     }
 
-.update-btn {
+.submit-btn {
     width: 100%;
     box-sizing: border-box;
     padding: 10px;
@@ -53,11 +54,11 @@
     transition: background-color 0.3s ease;
 }
 
-    .update-btn:hover {
+    .submit-btn:hover {
         background-color: #0056b3;
     }
 
-.message {
+.response-message {
     text-align: center;
     margin-top: 20px;
     font-family: 'Arial', sans-serif;
@@ -65,13 +66,13 @@
     border-radius: 4px;
 }
 
-    .message.success {
+    .response-message.success {
         color: #155724;
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
 
-    .message.error {
+    .response-message.error {
         color: #721c24;
         background-color: #f8d7da;
         border-color: #f5c6cb;

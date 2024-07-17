@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
-import { register } from '../services/authService';
-import './Register.css';
+import { sendContactMessage } from '../services/contactService';
+import './ContactForm.css';
 
-function Register() {
+function ContactForm() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
-    const [senha, setSenha] = useState('');
-    const [message, setMessage] = useState('');
+    const [mensagem, setMensagem] = useState('');
+    const [responseMessage, setResponseMessage] = useState('');
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            await register(nome, email, senha);
-            setMessage('Usuário registrado com sucesso');
+            await sendContactMessage({ nome, email, mensagem });
+            setResponseMessage('Mensagem enviada com sucesso!');
             setNome('');
             setEmail('');
-            setSenha('');
+            setMensagem('');
         } catch (error) {
-            setMessage('Erro ao registrar usuário. Por favor, tente novamente.');
+            setResponseMessage('Erro ao enviar a mensagem. Tente novamente.');
         }
     };
 
     return (
-        <div className="register-container">
-            <h2>Registrar</h2>
-            <form onSubmit={handleSubmit} className="register-form">
+        <div className="contact-form-container">
+            <h2>Contato</h2>
+            <form onSubmit={handleSubmit} className="contact-form">
                 <div className="form-group">
                     <label>Nome</label>
                     <input
@@ -46,20 +46,19 @@ function Register() {
                     />
                 </div>
                 <div className="form-group">
-                    <label>Senha</label>
-                    <input
-                        type="password"
-                        value={senha}
-                        onChange={(e) => setSenha(e.target.value)}
+                    <label>Mensagem</label>
+                    <textarea
+                        value={mensagem}
+                        onChange={(e) => setMensagem(e.target.value)}
                         required
                         className="form-control"
                     />
                 </div>
-                <button type="submit" className="register-btn">Registrar</button>
+                <button type="submit" className="submit-btn">Enviar</button>
             </form>
-            {message && <p className="message error">{message}</p>}
+            {responseMessage && <p className="response-message">{responseMessage}</p>}
         </div>
     );
 }
 
-export default Register;
+export default ContactForm;

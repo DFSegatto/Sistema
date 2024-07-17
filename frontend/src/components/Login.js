@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { login } from '../services/authService';
+import { useAuth } from '../authContext';
 import './Login.css';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
     const [message, setMessage] = useState('');
+    const { login: authLogin } = useAuth();
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const data = await login(email, senha);
-            setMessage('Login successful');
-            console.log('Token:', data.token); // Você pode armazenar o token no localStorage ou contexto
+            const userData = await login(email, senha);
+            authLogin(userData);
+            navigate('/');
         } catch (error) {
-            const errorMsg = error.response ? error.response.data.error : error.message;
-            setMessage(`Error logging in: ${errorMsg}`);
+            setMessage('Erro ao fazer login. Por favor, tente novamente.');
         }
     };
 
@@ -45,7 +48,7 @@ function Login() {
                 </div>
                 <button type="submit" className="login-btn">Entrar</button>
             </form>
-            {message && <p className="message">{message}</p>}
+            {message && <p className="message error">{message}</p>}
         </div>
     );
 }

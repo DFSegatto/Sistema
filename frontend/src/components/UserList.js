@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getAllUsers, deleteUser } from '../services/userService';
+import { useNavigate } from 'react-router-dom';
 import './UserList.css';
 
 function UserList() {
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchUsers();
@@ -29,6 +31,10 @@ function UserList() {
         }
     };
 
+    const handleEdit = (id) => {
+        navigate(`/update-user/${id}`);
+    };
+
     return (
         <div className="user-list-container">
             <h2>User List</h2>
@@ -49,6 +55,7 @@ function UserList() {
                             <td>{user.nome}</td>
                             <td>{user.email}</td>
                             <td>
+                                <button onClick={() => handleEdit(user.id)} className="btn-edit">Edit</button>
                                 <button onClick={() => handleDelete(user.id)} className="btn-delete">Delete</button>
                             </td>
                         </tr>

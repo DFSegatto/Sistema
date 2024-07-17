@@ -1,99 +1,121 @@
-const db = require('../models');
-const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/usuario');
 
-const secret = 'your_jwt_secret'; // Você deve usar uma variável de ambiente para o segredo na produção
-
+// Função para criar um usuário
 const createUser = async (req, res) => {
-  const { nome, email, senha } = req.body;
-  const hashedPassword = bcrypt.hashSync(senha, 8);
+    const { nome, email, senha } = req.body;
 
-  try {
-    const newUser = await db.Usuario.create({ nome, email, senha: hashedPassword });
-    res.status(201).json(newUser);
-  } catch (error) {
-    res.status(400).json({ error: 'Unable to create user', details: error.message });
-  }
+    try {
+        console.log('Tentando criar usuário:', { nome, email });
+        const hashedPassword = await bcrypt.hash(senha, 10);
+        const newUser = await Usuario.create({ nome, email, senha: hashedPassword });
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.error('Erro ao criar usuário:', error);
+        res.status(500).json({ error: 'Erro ao criar usuário' });
+    }
 };
 
+// Função para fazer login do usuário
 const loginUser = async (req, res) => {
-  const { email, senha } = req.body;
+    const { email, senha } = req.body;
 
-  try {
-    const user = await db.Usuario.findOne({ where: { email } });
+    try {
+        console.log('Tentando fazer login para:', email);
+        const user = await Usuario.findOne({ where: { email } });
+        if (!user) {
+            return res.status(400).json({ error: 'Email ou senha inválidos' });
+        }
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+        const isMatch = await bcrypt.compare(senha, user.senha);
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Email ou senha inválidos' });
+        }
+
+        const token = jwt.sign({ id: user.id }, 'seu_segredo_jwt', { expiresIn: '1h' });
+        res.json({ user: { id: user.id, nome: user.nome, email: user.email }, token });
+    } catch (error) {
+        console.error('Erro ao fazer login:', error);
+        res.status(500).json({ error: 'Erro ao fazer login' });
     }
-
-    const isPasswordValid = bcrypt.compareSync(senha, user.senha);
-
-    if (!isPasswordValid) {
-      return res.status(401).json({ error: 'Invalid password' });
-    }
-
-    const token = jwt.sign({ id: user.id, email: user.email }, secret, { expiresIn: '1h' });
-
-    res.status(200).json({ token });
-  } catch (error) {
-    res.status(400).json({ error: 'Unable to login user', details: error.message });
-  }
 };
 
+// Função para atualizar um usuário
 const updateUser = async (req, res) => {
-  const { id } = req.params;
-  const { nome, email, senha } = req.body;
-  const hashedPassword = senha ? bcrypt.hashSync(senha, 8) : undefined;
+    const { id } = req.params;
+    const { nome, email, senha } = req.body;
 
-  try {
-    const user = await db.Usuario.findByPk(id);
+    try {
+        const user = await Usuario.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+        const hashedPassword = senha ? await bcrypt.hash(senha, 10) : user.senha;
+        user.nome = nome;
+        user.email = email;
+        user.senha = hashedPassword;
+        await user.save();
+
+        res.json(user);
+    } catch (error) {
+        console.error('Erro ao atualizar usuário:', error);
+        res.status(500).json({ error: 'Erro ao atualizar usuário' });
     }
-
-    const updatedUser = await user.update({
-      nome: nome || user.nome,
-      email: email || user.email,
-      senha: hashedPassword || user.senha,
-    });
-
-    res.status(200).json(updatedUser);
-  } catch (error) {
-    res.status(400).json({ error: 'Unable to update user', details: error.message });
-  }
 };
 
+// Função para deletar um usuário
 const deleteUser = async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
 
-  try {
-    const user = await db.Usuario.findByPk(id);
+    try {
+        const user = await Usuario.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
 
-    if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+        await user.destroy();
+        res.json({ message: 'Usuário deletado com sucesso' });
+    } catch (error) {
+        console.error('Erro ao deletar usuário:', error);
+        res.status(500).json({ error: 'Erro ao deletar usuário' });
     }
-
-    await user.destroy();
-    res.status(204).send();
-  } catch (error) {
-    res.status(400).json({ error: 'Unable to delete user', details: error.message });
-  }
 };
 
+// Função para obter todos os usuários
 const getAllUsers = async (req, res) => {
-  try {
-    const users = await db.Usuario.findAll();
-    res.status(200).json(users);
-  } catch (error) {
-    res.status(400).json({ error: 'Unable to fetch users' });
-  }
+    try {
+        const users = await Usuario.findAll();
+        res.json(users);
+    } catch (error) {
+        console.error('Erro ao obter usuários:', error);
+        res.status(500).json({ error: 'Erro ao obter usuários' });
+    }
+};
+
+// Função para obter um usuário por ID
+const getUserById = async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const user = await Usuario.findByPk(id);
+        if (!user) {
+            return res.status(404).json({ error: 'Usuário não encontrado' });
+        }
+
+        res.json(user);
+    } catch (error) {
+        console.error('Erro ao buscar usuário:', error);
+        res.status(500).json({ error: 'Erro ao buscar usuário' });
+    }
 };
 
 module.exports = {
-  createUser,
-  loginUser,
-  updateUser,
-  deleteUser,
-  getAllUsers,
+    createUser,
+    loginUser,
+    updateUser,
+    deleteUser,
+    getAllUsers,
+    getUserById,
 };
