@@ -1,4 +1,4 @@
-Sistema de Gerenciamento de Restaurante
+Sistema de Gerenciamento de Restaurante.
 
 Introdução
 As novas tecnologias revolucionaram a maneira como os restaurantes operam e interagem com seus clientes. O Sistema de Gerenciamento de Restaurante foi desenvolvido para proporcionar uma experiência digital aprimorada tanto para os administradores do restaurante quanto para os clientes. Este sistema oferece funcionalidades como gestão de usuários, cadastro de pratos, envio de mensagens de contato e gerenciamento de reservas, otimizando a operação do restaurante e melhorando a satisfação do cliente.
