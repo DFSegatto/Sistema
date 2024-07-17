@@ -1,12 +1,12 @@
 .home-page {
     font-family: 'Arial', sans-serif;
     text-align: center;
-    background-color: #f0f8ff; /* Fundo da página */
+    background-color: #f0f8ff; 
     color: #333;
 }
 
 .hero-section {
-    background-image: url('./hero-image.jpg'); /* Caminho para a imagem gerada */
+    background-image: url('./hero-image.jpg');
     background-size: cover;
     background-position: center;
     padding: 100px 0;
@@ -27,7 +27,7 @@
 
     .features-section h2 {
         margin-bottom: 20px;
-        color: #ff6347; /* Título em tom de vermelho */
+        color: #ff6347;
     }
 
     .features-section ul {
@@ -38,5 +38,5 @@
     .features-section li {
         margin: 10px 0;
         font-size: 18px;
-        color: #20b2aa; /* Texto em tom de verde-azulado */
+        color: #20b2aa; 
     }

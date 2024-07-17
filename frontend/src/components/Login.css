@@ -22,7 +22,7 @@
 
 .form-group {
     margin-bottom: 15px;
-    padding: 0 10px; /* Adicionado padding aqui */
+    padding: 0 10px;
 }
 
     .form-group label {
@@ -33,7 +33,7 @@
 
     .form-group input {
         width: 100%;
-        box-sizing: border-box; /* Adicionado box-sizing aqui */
+        box-sizing: border-box; 
         padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
@@ -42,7 +42,7 @@
 
 .login-btn {
     width: 100%;
-    box-sizing: border-box; /* Adicionado box-sizing aqui */
+    box-sizing: border-box; 
     padding: 10px;
     background-color: #007bff;
     border: none;
