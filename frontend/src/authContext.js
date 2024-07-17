@@ -1,32 +1,33 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
-const AuthContext = createContext();
+export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     useEffect(() => {
-        const storedUser = localStorage.getItem('user');
-        if (storedUser) {
-            setUser(JSON.parse(storedUser));
-        }
+        // Remova qualquer lógica que persista o token no localStorage
+        setIsAuthenticated(false);
     }, []);
 
-    const login = (userData) => {
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
+    const login = (token) => {
+        // Não salvar o token no localStorage
+        setIsAuthenticated(true);
     };
 
     const logout = () => {
-        setUser(null);
-        localStorage.removeItem('user');
+        // Não remover o token do localStorage
+        setIsAuthenticated(false);
     };
 
-    const value = { user, login, logout };
-
-    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+    return (
+        <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
+            {children}
+        </AuthContext.Provider>
+    );
 };
 
+// Hook personalizado para usar o contexto de autenticação
 export const useAuth = () => {
     return useContext(AuthContext);
 };

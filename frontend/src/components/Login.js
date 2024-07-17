@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/authService';
-import { useAuth } from '../authContext';
+import { useAuth } from '../authContext'; // Importe o hook personalizado
+import { login as loginService } from '../services/authService'; // Importe o serviço de autenticação
 import './Login.css';
 
 function Login() {
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [message, setMessage] = useState('');
-    const { login: authLogin } = useAuth();
+    const [error, setError] = useState('');
     const navigate = useNavigate();
+    const { login } = useAuth(); // Use o hook personalizado
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const userData = await login(email, senha);
-            authLogin(userData);
+            const { token } = await loginService(email, senha);
+            login(token);
             navigate('/');
         } catch (error) {
-            setMessage('Erro ao fazer login. Por favor, tente novamente.');
+            setError('Credenciais inválidas');
         }
     };
 
@@ -46,9 +46,9 @@ function Login() {
                         className="form-control"
                     />
                 </div>
-                <button type="submit" className="login-btn">Entrar</button>
+                {error && <p className="error-message">{error}</p>}
+                <button type="submit" className="login-btn">Login</button>
             </form>
-            {message && <p className="message error">{message}</p>}
         </div>
     );
 }

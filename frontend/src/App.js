@@ -7,6 +7,7 @@ import Register from './components/Register';
 import UpdateUser from './components/UpdateUser';
 import UserList from './components/UserList';
 import ContactForm from './components/ContactForm';
+// import PrivateRoute from './components/PrivateRoute'; // Comente esta linha se necessário
 import { AuthProvider } from './authContext';
 import './App.css';
 

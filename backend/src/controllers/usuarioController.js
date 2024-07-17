@@ -17,6 +17,10 @@ const createUser = async (req, res) => {
     }
 };
 
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+const Usuario = require('../models/usuario');
+
 // Função para fazer login do usuário
 const loginUser = async (req, res) => {
     const { email, senha } = req.body;
@@ -34,7 +38,7 @@ const loginUser = async (req, res) => {
         }
 
         const token = jwt.sign({ id: user.id }, 'seu_segredo_jwt', { expiresIn: '1h' });
-        res.json({ user: { id: user.id, nome: user.nome, email: user.email }, token });
+        res.json({ token });
     } catch (error) {
         console.error('Erro ao fazer login:', error);
         res.status(500).json({ error: 'Erro ao fazer login' });

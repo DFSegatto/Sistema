@@ -1,23 +1,26 @@
 import React, { useState } from 'react';
-import { register } from '../services/authService';
+import { register } from '../services/authService'; // Importe a função de registro
 import './Register.css';
 
 function Register() {
     const [nome, setNome] = useState('');
     const [email, setEmail] = useState('');
     const [senha, setSenha] = useState('');
-    const [message, setMessage] = useState('');
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false); // Adicionar estado para sucesso
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
             await register(nome, email, senha);
-            setMessage('Usuário registrado com sucesso');
-            setNome('');
-            setEmail('');
-            setSenha('');
+            setNome(''); // Limpar o campo nome
+            setEmail(''); // Limpar o campo email
+            setSenha(''); // Limpar o campo senha
+            setError(''); // Limpar mensagens de erro
+            setSuccess(true); // Definir estado de sucesso
         } catch (error) {
-            setMessage('Erro ao registrar usuário. Por favor, tente novamente.');
+            setError('Erro ao registrar usuário');
+            setSuccess(false); // Definir estado de falha
         }
     };
 
@@ -55,9 +58,10 @@ function Register() {
                         className="form-control"
                     />
                 </div>
+                {error && <p className="error-message">{error}</p>}
+                {success && <p className="success-message">Usuario registrado com sucesso!</p>}
                 <button type="submit" className="register-btn">Registrar</button>
             </form>
-            {message && <p className="message error">{message}</p>}
         </div>
     );
 }
