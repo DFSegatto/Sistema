@@ -74,7 +74,6 @@ const deleteUser = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
-
         await user.destroy();
         res.json({ message: 'Usuário deletado com sucesso' });
     } catch (error) {
@@ -103,7 +102,6 @@ const getUserById = async (req, res) => {
         if (!user) {
             return res.status(404).json({ error: 'Usuário não encontrado' });
         }
-
         res.json(user);
     } catch (error) {
         console.error('Erro ao buscar usuário:', error);
