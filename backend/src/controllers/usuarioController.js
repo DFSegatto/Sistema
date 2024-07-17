@@ -17,10 +17,6 @@ const createUser = async (req, res) => {
     }
 };
 
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
-const Usuario = require('../models/usuario');
-
 // Função para fazer login do usuário
 const loginUser = async (req, res) => {
     const { email, senha } = req.body;
