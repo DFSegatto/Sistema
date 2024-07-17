@@ -24,10 +24,10 @@ function UserList() {
     const handleDelete = async (id) => {
         try {
             await deleteUser(id);
-            setMessage('User deleted successfully');
-            fetchUsers(); // Atualize a lista de usuários após a exclusão
+            setMessage('Usuario excluido com sucesso');
+            fetchUsers();  
         } catch (error) {
-            setMessage('Error deleting user');
+            setMessage('Erro ao excluir usuario  ');
         }
     };
 
@@ -37,7 +37,7 @@ function UserList() {
 
     return (
         <div className="user-list-container">
-            <h2>User List</h2>
+            <h2>Lista de Usuarios</h2>
             {message && <p className="message">{message}</p>}
             <table className="user-list-table">
                 <thead>
